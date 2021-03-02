@@ -44,15 +44,15 @@ pub_GPS = rospy.Publisher('/block/gpsRoverStatus', NavSatFix, queue_size=10)
 pub_IMU = rospy.Publisher('/block/imu/imu', Imu, queue_size=10)
 pub_gt = rospy.Publisher('/block/ground_truth/state', Odometry, queue_size=10)
 
-pub_command = rospy.Publisher('/OCS/chassisCommand', chassisCommand, queue_size=10)
+pub_command = rospy.Publisher('/mppi_controller/chassisCommand', chassisCommand, queue_size=10)
 
 
 def commandCallback(data_command):
-    # print "got command"
+    print "got command"
     pub_command.publish(data_command)
 
 def rightcamCallback(data_rightcam):
-    print "got right cam"
+    # print "got right cam"
     pub_rightcam.publish(data_rightcam)
 
 def leftcamCallback(data_leftcam):
@@ -87,7 +87,7 @@ def gtCallback(data_gt):
     # print "got ground truth"
     pub_gt.publish(data_gt)
 
-rospy.Subscriber("/block/OCS/chassisCommand", chassisCommand, commandCallback)
+rospy.Subscriber("/block//mppi_controller/chassisCommand", chassisCommand, commandCallback)
 rospy.Subscriber("/right_camera/image_raw", Image, rightcamCallback)
 rospy.Subscriber("/left_camera/image_raw", Image, leftcamCallback)
 rospy.Subscriber("/right_camera/camera_info", CameraInfo, rightcaminfoCallback)
