@@ -22,7 +22,7 @@ subprocess.Popen(
     "sh /usr/local/bin/start_desktop.sh", shell=True)
 time.sleep(5)
 
-
+# get display number
 subprocess.Popen("echo $DISPLAY", shell=True)
 
 # locating autorally gazebo launch file
@@ -34,6 +34,7 @@ launch_path = rospack.get_path('autorally_gazebo') + '/launch/autoRallyTrackGaze
 gazebo_p = subprocess.Popen('vglrun roslaunch {} &'.format(launch_path), shell=True)
 print "starting autorally block launch file!"
 
+# creating relay topics (publishers) for sensors
 pub_leftcam = rospy.Publisher('/block/left_camera/image_raw', Image, queue_size=10)
 pub_rightcam = rospy.Publisher('/block/right_camera/image_raw', Image, queue_size=10)
 pub_leftcaminfo = rospy.Publisher('/block/left_camera/camera_info', CameraInfo, queue_size=10)
@@ -44,13 +45,21 @@ pub_GPS = rospy.Publisher('/block/gpsRoverStatus', NavSatFix, queue_size=10)
 pub_IMU = rospy.Publisher('/block/imu/imu', Imu, queue_size=10)
 pub_gt = rospy.Publisher('/block/ground_truth/state', Odometry, queue_size=10)
 
+<<<<<<< HEAD
 pub_command = rospy.Publisher('/mppi_controller/chassisCommand', chassisCommand, queue_size=10)
+=======
+# creating relay topic for input command
+pub_command = rospy.Publisher('/OCS/chassisCommand', chassisCommand, queue_size=10)
+>>>>>>> 7402060ea6faa75f36049bf3086ee76745120b0a
 
 
+# command callback function
 def commandCallback(data_command):
     print "got command"
     pub_command.publish(data_command)
 
+
+# sensors callback functions
 def rightcamCallback(data_rightcam):
     # print "got right cam"
     pub_rightcam.publish(data_rightcam)
@@ -87,7 +96,14 @@ def gtCallback(data_gt):
     # print "got ground truth"
     pub_gt.publish(data_gt)
 
+<<<<<<< HEAD
 rospy.Subscriber("/block//mppi_controller/chassisCommand", chassisCommand, commandCallback)
+=======
+
+
+# creating subscribers for sensors and control command
+rospy.Subscriber("/block/OCS/chassisCommand", chassisCommand, commandCallback)
+>>>>>>> 7402060ea6faa75f36049bf3086ee76745120b0a
 rospy.Subscriber("/right_camera/image_raw", Image, rightcamCallback)
 rospy.Subscriber("/left_camera/image_raw", Image, leftcamCallback)
 rospy.Subscriber("/right_camera/camera_info", CameraInfo, rightcaminfoCallback)
